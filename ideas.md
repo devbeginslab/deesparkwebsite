@@ -68,3 +68,10 @@ The supplied blue Deespark mark is treated as the authoritative brand mark. It a
 ### Signature Brand Color
 
 **Deespark Cobalt — #1166D8**.
+
+## Style Decisions
+
+- Generous whitespace must remain visibly structured with ledger primitives such as cobalt rules, numbered markers, marigold tags, botanical annotation, or direct service cues.
+- The supplied cobalt logo appears within a consistent **Deespark Wellness Company** lockup in the masthead and closing footer, while the icon alone remains appropriate for compact contexts such as the favicon.
+- Every major section carries at least one ledger primitive so product, eyewear, service, contact, and ordering experiences read as one editorial-apothecary catalogue.
+- The final ordering close must combine clear brand presence, direct WhatsApp reassurance, and the cobalt, green, and marigold system rather than relying on a single isolated CTA.

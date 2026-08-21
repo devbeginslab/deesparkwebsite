@@ -223,6 +223,10 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    target: "es2020",
+    cssCodeSplit: true,
+    assetsInlineLimit: 0,
+    reportCompressedSize: false,
   },
   server: {
     port: 3000,

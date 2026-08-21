@@ -3,15 +3,15 @@
  * Editorial, practical wellness commerce using warm paper, Deespark Cobalt,
  * botanical accents, generous whitespace, and untouched source imagery.
  */
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Check,
   ChevronDown,
   Leaf,
   Menu,
   MessageCircle,
+  Send,
   ShieldCheck,
   Sparkles,
   Truck,
@@ -52,6 +52,8 @@ const products = [
     image: assets.deenormalizer,
     message: "Hello Deespark Wellness, I would like to order Deenormalizer Herbal Capsules.",
     accent: "cobalt",
+    width: 1536,
+    height: 1024,
   },
   {
     number: "02",
@@ -62,6 +64,8 @@ const products = [
     image: assets.orzaklin,
     message: "Hello Deespark Wellness, I would like to order Orzaklin Herbal Capsule.",
     accent: "green",
+    width: 1305,
+    height: 1205,
   },
   {
     number: "03",
@@ -72,6 +76,8 @@ const products = [
     image: assets.invekior,
     message: "Hello Deespark Wellness, I would like to order Invekior Herbal Capsule.",
     accent: "marigold",
+    width: 1355,
+    height: 1160,
   },
 ];
 
@@ -81,12 +87,16 @@ const eyewear = [
     description: "Polished, wearable frames for a composed daily look.",
     image: assets.glassesLookOne,
     message: "Hello Deespark Wellness, I would like to ask about your everyday eyewear frames.",
+    width: 768,
+    height: 1360,
   },
   {
     title: "Statement frames",
     description: "Expressive silhouettes chosen to bring a little confidence to your edit.",
     image: assets.glassesLookTwo,
     message: "Hello Deespark Wellness, I would like to ask about your statement eyewear frames.",
+    width: 1254,
+    height: 1254,
   },
 ];
 
@@ -97,6 +107,7 @@ function whatsappLink(message: string) {
 export default function Home() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "opening">("idle");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 14);
@@ -121,18 +132,39 @@ export default function Home() {
 
   const closeMenu = () => setOpen(false);
 
+  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") ?? "").trim();
+    const phone = String(data.get("phone") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
+    const contactDetails = [phone ? `Phone: ${phone}` : "", email ? `Email: ${email}` : ""].filter(Boolean).join("\n");
+    const enquiry = [
+      `Hello Deespark Wellness, my name is ${name}.`,
+      "I would like assistance with the following enquiry:",
+      message,
+      contactDetails ? `My contact details:\n${contactDetails}` : "",
+    ].filter(Boolean).join("\n\n");
+
+    setFormStatus("opening");
+    window.open(whatsappLink(enquiry), "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="site-shell" style={surfaceStyles}>
       <header className={`site-header ${scrolled ? "site-header--scrolled" : ""}`}>
         <div className="header-inner">
           <a className="brand-lockup" href="#top" aria-label="Deespark Wellness home">
             <img src={LOGO} alt="Deespark Wellness" />
+            <span className="brand-lockup__wordmark"><strong>Deespark</strong><small>Wellness Company</small></span>
           </a>
 
           <nav className="desktop-nav" aria-label="Primary navigation">
             <a href="#products">Products</a>
             <a href="#eyewear">Eyewear</a>
             <a href="#why-deespark">Why Deespark</a>
+            <a href="#contact">Contact</a>
           </nav>
 
           <a
@@ -163,6 +195,7 @@ export default function Home() {
           <a href="#products" onClick={closeMenu}>Herbal products <ArrowRight size={18} /></a>
           <a href="#eyewear" onClick={closeMenu}>Eyewear collection <ArrowRight size={18} /></a>
           <a href="#why-deespark" onClick={closeMenu}>Why choose us <ArrowRight size={18} /></a>
+          <a href="#contact" onClick={closeMenu}>Contact us <ArrowRight size={18} /></a>
           <a
             className="mobile-menu__whatsapp"
             href={whatsappLink("Hello Deespark Wellness, I would like to make an order.")}
@@ -210,6 +243,10 @@ export default function Home() {
                 <img
                   src={assets.deenormalizer}
                   alt="Deenormalizer Herbal Capsules"
+                  width={1536}
+                  height={1024}
+                  fetchPriority="high"
+                  decoding="async"
                 />
               </div>
               <div className="hero-product__caption">
@@ -238,7 +275,14 @@ export default function Home() {
               <article className={`product-row product-row--${product.accent}`} key={product.name}>
                 <div className="product-row__number">{product.number}</div>
                 <div className="product-row__image">
-                  <img src={product.image} alt={product.name} loading={index === 0 ? "eager" : "lazy"} />
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    width={product.width}
+                    height={product.height}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
                 </div>
                 <div className="product-row__details">
                   <p className="product-row__label">{product.label}</p>
@@ -268,6 +312,7 @@ export default function Home() {
           <div className="eyewear-inner">
             <div className="eyewear-intro">
               <p className="eyebrow">The eyewear edit</p>
+              <p className="ledger-index">02 / Frame journal</p>
               <h2 id="eyewear-title">A considered frame changes the <em>whole look.</em></h2>
               <p>
                 Alongside wellness, Deespark offers stylish frames for the everyday moments
@@ -281,7 +326,7 @@ export default function Home() {
               {eyewear.map((item, index) => (
                 <article className={`eyewear-card eyewear-card--${index + 1}`} key={item.title}>
                   <div className="eyewear-card__image">
-                    <img src={item.image} alt={item.title} loading="lazy" />
+                    <img src={item.image} alt={item.title} width={item.width} height={item.height} loading="lazy" decoding="async" />
                   </div>
                   <div className="eyewear-card__content">
                     <span>0{index + 1}</span>
@@ -324,12 +369,59 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="contact-section" id="contact" aria-labelledby="contact-title">
+          <div className="contact-section__inner">
+            <div className="contact-copy">
+              <p className="eyebrow">A direct line to Deespark</p>
+              <h2 id="contact-title">Tell us how we can <em>help today.</em></h2>
+              <p>
+                Send your enquiry below and we will open WhatsApp with your details prepared,
+                so you can continue the conversation directly with our team.
+              </p>
+              <a href={WHATSAPP} target="_blank" rel="noreferrer" className="contact-copy__phone">
+                <MessageCircle size={18} /> 090 3032 5735 <ArrowUpRight size={17} />
+              </a>
+            </div>
+
+            <form className="contact-form" onSubmit={handleContactSubmit}>
+              <div className="contact-form__heading">
+                <span>01</span>
+                <p>Customer enquiry form</p>
+              </div>
+              <div className="contact-form__grid">
+                <label>
+                  <span>Your name <b>*</b></span>
+                  <input name="name" type="text" autoComplete="name" required placeholder="Your full name" onChange={() => setFormStatus("idle")} />
+                </label>
+                <label>
+                  <span>Phone number</span>
+                  <input name="phone" type="tel" autoComplete="tel" inputMode="tel" placeholder="Your preferred number" onChange={() => setFormStatus("idle")} />
+                </label>
+                <label className="contact-form__wide">
+                  <span>Email address</span>
+                  <input name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" onChange={() => setFormStatus("idle")} />
+                </label>
+                <label className="contact-form__wide">
+                  <span>How can we help? <b>*</b></span>
+                  <textarea name="message" required rows={4} placeholder="Tell us what you would like to ask about." onChange={() => setFormStatus("idle")} />
+                </label>
+              </div>
+              <div className="contact-form__action">
+                <button type="submit"><Send size={17} /> Continue in WhatsApp <ArrowUpRight size={17} /></button>
+                <p>{formStatus === "opening" ? "WhatsApp is ready with your enquiry details." : "Your form details are not stored on this website."}</p>
+              </div>
+            </form>
+          </div>
+        </section>
+
         <section className="cta-section" aria-labelledby="cta-title">
           <div className="cta-section__line" />
           <div>
             <p className="eyebrow">Ready when you are</p>
+            <p className="ledger-index">03 / Direct ordering</p>
             <h2 id="cta-title">Choose a product.<br /><em>Start your WhatsApp order.</em></h2>
           </div>
+          <div className="cta-service-note"><span>WhatsApp orders & enquiries</span><strong>090 3032 5735</strong></div>
           <a href={whatsappLink("Hello Deespark Wellness, I would like to make an order.")} target="_blank" rel="noreferrer" className="cta-circle">
             <MessageCircle size={27} />
             <span>Message<br />Deespark</span>
@@ -340,7 +432,10 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="footer-main">
-          <a className="footer-logo" href="#top"><img src={LOGO} alt="Deespark Wellness" /></a>
+          <a className="footer-logo" href="#top">
+            <img src={LOGO} alt="Deespark Wellness" />
+            <span><strong>Deespark</strong><small>Wellness Company</small></span>
+          </a>
           <div className="footer-contact">
             <p>For orders & enquiries</p>
             <a href={WHATSAPP} target="_blank" rel="noreferrer">090 3032 5735 <ArrowUpRight size={16} /></a>

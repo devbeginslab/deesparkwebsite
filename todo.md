@@ -8,3 +8,16 @@
 - [ ] Provide the user with the repository access and GitHub Pages publishing steps.
 - [ ] Publish to the user’s chosen GitHub repository only after explicit authorization.
 - [x] Enable the GitHub connector and complete the user authorization flow.
+- [x] Resolve the remaining GitHub Pages root-route 404 despite a successful deployment workflow.
+- [x] Identify that the GitHub Actions build required an explicit repository-base environment variable for client routing.
+- [x] Identify that the public Pages URL is still serving the repository branch source rather than the workflow artifact.
+- [x] Add a floating WhatsApp button for general customer enquiries.
+- [x] Verify the floating enquiry button is clear and usable on desktop and mobile.
+- [x] Add a subtle pulse animation to the floating WhatsApp button.
+- [x] Update the floating button’s WhatsApp greeting for friendly customer assistance.
+- [x] Verify the refined floating button across desktop and mobile.
+- [x] Verify and restore visibility of the latest floating WhatsApp update on the public mobile site.
+- [x] Confirm that the GitHub Pages URL is serving an older build without the floating WhatsApp enquiry control.
+- [x] Add a homepage contact form with a clear WhatsApp follow-up route.
+- [x] Improve image loading, script delivery, and mobile interaction performance.
+- [x] Verify the contact form and responsive layout on desktop and mobile.
