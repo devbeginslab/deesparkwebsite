@@ -208,9 +208,7 @@ const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(
 export default defineConfig({
   base:
     process.env.VITE_GITHUB_PAGES === "true"
-      ? process.env.GITHUB_REPOSITORY
-        ? `/${process.env.GITHUB_REPOSITORY.split("/").at(-1)}/`
-        : "./"
+      ? process.env.VITE_GITHUB_PAGES_BASE || "./"
       : "/",
   plugins,
   resolve: {
