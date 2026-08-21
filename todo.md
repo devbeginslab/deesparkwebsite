@@ -1,0 +1,10 @@
+- [x] Replace each herbal product text order link with a clear Order Now WhatsApp CTA.
+- [x] Confirm every product CTA carries a product-specific prefilled WhatsApp message.
+- [x] Validate the updated CTA layout on desktop and mobile, then save a checkpoint.
+- [x] Configure the Vite build for repository-based GitHub Pages paths.
+- [x] Add an automated GitHub Pages deployment workflow and publishing guide.
+- [x] Run a production build to verify the GitHub Pages setup.
+- [x] Check whether a GitHub connection is available for repository publishing.
+- [ ] Provide the user with the repository access and GitHub Pages publishing steps.
+- [ ] Publish to the user’s chosen GitHub repository only after explicit authorization.
+- [x] Enable the GitHub connector and complete the user authorization flow.
