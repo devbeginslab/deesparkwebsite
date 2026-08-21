@@ -353,6 +353,20 @@ export default function Home() {
         </div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} Deespark Wellness Company</span><span>Natural wellness & considered style</span></div>
       </footer>
+
+      <a
+        className={`floating-whatsapp ${open ? "floating-whatsapp--hidden" : ""}`}
+        href={whatsappLink("Hello! Welcome to Deespark Wellness. How can we help you today?")}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Chat with Deespark on WhatsApp for general customer enquiries"
+      >
+        <span className="floating-whatsapp__icon"><MessageCircle size={22} strokeWidth={2} /></span>
+        <span className="floating-whatsapp__copy">
+          <strong>Chat with us</strong>
+          <small>General enquiries</small>
+        </span>
+      </a>
     </div>
   );
 }
