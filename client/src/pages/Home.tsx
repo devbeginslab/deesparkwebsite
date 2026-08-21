@@ -7,6 +7,7 @@ import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
+  CircleCheck,
   ChevronDown,
   Leaf,
   Menu,
@@ -17,6 +18,14 @@ import {
   Truck,
   X,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 
 const WHATSAPP = "https://wa.me/2349030325735";
 const isGitHubPagesBuild = import.meta.env.VITE_GITHUB_PAGES === "true";
@@ -107,7 +116,9 @@ function whatsappLink(message: string) {
 export default function Home() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [formStatus, setFormStatus] = useState<"idle" | "opening">("idle");
+  const [formStatus, setFormStatus] = useState<"idle" | "opening" | "success">("idle");
+  const [inquiryCategory, setInquiryCategory] = useState("");
+  const [categoryError, setCategoryError] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 14);
@@ -134,21 +145,40 @@ export default function Home() {
 
   const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!inquiryCategory) {
+      setCategoryError(true);
+      return;
+    }
+
+    const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
     const name = String(data.get("name") ?? "").trim();
     const phone = String(data.get("phone") ?? "").trim();
     const email = String(data.get("email") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
+    const category = String(data.get("category") ?? "").trim();
     const contactDetails = [phone ? `Phone: ${phone}` : "", email ? `Email: ${email}` : ""].filter(Boolean).join("\n");
     const enquiry = [
       `Hello Deespark Wellness, my name is ${name}.`,
-      "I would like assistance with the following enquiry:",
+      `My enquiry category is: ${category}.`,
+      "I would like assistance with the following:",
       message,
       contactDetails ? `My contact details:\n${contactDetails}` : "",
     ].filter(Boolean).join("\n\n");
 
     setFormStatus("opening");
     window.open(whatsappLink(enquiry), "_blank", "noopener,noreferrer");
+    window.setTimeout(() => {
+      setFormStatus("success");
+      form.reset();
+      setInquiryCategory("");
+      window.setTimeout(() => setFormStatus("idle"), 4800);
+    }, 650);
+  };
+
+  const resetFormFeedback = () => {
+    setFormStatus("idle");
+    setCategoryError(false);
   };
 
   return (
@@ -226,7 +256,7 @@ export default function Home() {
                   rel="noreferrer"
                 >
                   <MessageCircle size={19} />
-                  Start a WhatsApp order
+                  Order Now
                   <ArrowUpRight size={18} />
                 </a>
                 <a className="text-link" href="#products">Browse products <ArrowDown /></a>
@@ -330,6 +360,7 @@ export default function Home() {
                   </div>
                   <div className="eyewear-card__content">
                     <span>0{index + 1}</span>
+                    <p className="eyewear-card__meta">Frame note / Style edit</p>
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>
                     <a href={whatsappLink(item.message)} target="_blank" rel="noreferrer" aria-label={`Ask about ${item.title}`}>
@@ -344,7 +375,10 @@ export default function Home() {
 
         <section className="value-section" id="why-deespark" aria-labelledby="value-title">
           <div className="value-section__top">
-            <p className="eyebrow">The Deespark way</p>
+            <div className="value-section__index">
+              <p className="eyebrow">The Deespark way</p>
+              <p className="ledger-index">03 / Service notes</p>
+            </div>
             <h2 id="value-title">Clear choices. Direct service. <em>Thoughtful details.</em></h2>
           </div>
           <div className="value-grid">
@@ -373,6 +407,7 @@ export default function Home() {
           <div className="contact-section__inner">
             <div className="contact-copy">
               <p className="eyebrow">A direct line to Deespark</p>
+              <p className="ledger-index">04 / Customer correspondence</p>
               <h2 id="contact-title">Tell us how we can <em>help today.</em></h2>
               <p>
                 Send your enquiry below and we will open WhatsApp with your details prepared,
@@ -385,30 +420,58 @@ export default function Home() {
 
             <form className="contact-form" onSubmit={handleContactSubmit}>
               <div className="contact-form__heading">
-                <span>01</span>
-                <p>Customer enquiry form</p>
+                <span>04</span>
+                <div>
+                  <p>Customer correspondence</p>
+                  <small>WhatsApp handoff form</small>
+                </div>
+                <i aria-hidden="true" />
               </div>
               <div className="contact-form__grid">
                 <label>
                   <span>Your name <b>*</b></span>
-                  <input name="name" type="text" autoComplete="name" required placeholder="Your full name" onChange={() => setFormStatus("idle")} />
+                  <input name="name" type="text" autoComplete="name" required placeholder="Your full name" onChange={resetFormFeedback} />
                 </label>
                 <label>
                   <span>Phone number</span>
-                  <input name="phone" type="tel" autoComplete="tel" inputMode="tel" placeholder="Your preferred number" onChange={() => setFormStatus("idle")} />
+                  <input name="phone" type="tel" autoComplete="tel" inputMode="tel" placeholder="Your preferred number" onChange={resetFormFeedback} />
                 </label>
                 <label className="contact-form__wide">
                   <span>Email address</span>
-                  <input name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" onChange={() => setFormStatus("idle")} />
+                  <input name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" onChange={resetFormFeedback} />
+                </label>
+                <label className="contact-form__wide">
+                  <span>Enquiry category <b>*</b></span>
+                  <input type="hidden" name="category" value={inquiryCategory} />
+                  <Select value={inquiryCategory} onValueChange={(value) => { setInquiryCategory(value); setCategoryError(false); setFormStatus("idle"); }}>
+                    <SelectTrigger className="contact-form__select" aria-label="Enquiry category" aria-invalid={categoryError}>
+                      <SelectValue placeholder="Select what you need help with" />
+                    </SelectTrigger>
+                    <SelectContent className="contact-form__select-content">
+                      <SelectItem value="Products">Products</SelectItem>
+                      <SelectItem value="Delivery">Delivery</SelectItem>
+                      <SelectItem value="Eyewear">Eyewear</SelectItem>
+                      <SelectItem value="General support">General support</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {categoryError && <small className="contact-form__error">Please select an enquiry category.</small>}
                 </label>
                 <label className="contact-form__wide">
                   <span>How can we help? <b>*</b></span>
-                  <textarea name="message" required rows={4} placeholder="Tell us what you would like to ask about." onChange={() => setFormStatus("idle")} />
+                  <textarea name="message" required rows={4} placeholder="Tell us what you would like to ask about." onChange={resetFormFeedback} />
                 </label>
               </div>
               <div className="contact-form__action">
-                <button type="submit"><Send size={17} /> Continue in WhatsApp <ArrowUpRight size={17} /></button>
-                <p>{formStatus === "opening" ? "WhatsApp is ready with your enquiry details." : "Your form details are not stored on this website."}</p>
+                <button type="submit" disabled={formStatus === "opening"} aria-busy={formStatus === "opening"}>
+                  {formStatus === "opening" ? <Spinner /> : <Send size={17} />}
+                  {formStatus === "opening" ? "Preparing your message" : "Continue in WhatsApp"}
+                  {formStatus !== "opening" && <ArrowUpRight size={17} />}
+                </button>
+                <div className={`contact-form__status contact-form__status--${formStatus}`} aria-live="polite">
+                  {formStatus === "opening" && <><Spinner /> Preparing WhatsApp with your enquiry details.</>}
+                  {formStatus === "success" && <><CircleCheck size={17} /> Your enquiry is ready in WhatsApp. We will be happy to help.</>}
+                  {formStatus === "idle" && "Your form details are not stored on this website."}
+                </div>
               </div>
             </form>
           </div>
@@ -418,7 +481,7 @@ export default function Home() {
           <div className="cta-section__line" />
           <div>
             <p className="eyebrow">Ready when you are</p>
-            <p className="ledger-index">03 / Direct ordering</p>
+            <p className="ledger-index">05 / Direct ordering</p>
             <h2 id="cta-title">Choose a product.<br /><em>Start your WhatsApp order.</em></h2>
           </div>
           <div className="cta-service-note"><span>WhatsApp orders & enquiries</span><strong>090 3032 5735</strong></div>

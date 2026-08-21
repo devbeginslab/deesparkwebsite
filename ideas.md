@@ -75,3 +75,6 @@ The supplied blue Deespark mark is treated as the authoritative brand mark. It a
 - The supplied cobalt logo appears within a consistent **Deespark Wellness Company** lockup in the masthead and closing footer, while the icon alone remains appropriate for compact contexts such as the favicon.
 - Every major section carries at least one ledger primitive so product, eyewear, service, contact, and ordering experiences read as one editorial-apothecary catalogue.
 - The final ordering close must combine clear brand presence, direct WhatsApp reassurance, and the cobalt, green, and marigold system rather than relying on a single isolated CTA.
+- Contact and service panels use the same ledger language as products: chapter indices, fine cobalt rules, warm paper fields, and restrained marigold annotations rather than generic boxed-card styling.
+- The masthead lockup gives the unchanged supplied cobalt logo visible authority through an enlarged mark, a cobalt rule, and a deliberate Deespark Wellness Company wordmark treatment.
+- Eyewear is framed as a numbered style-journal chapter with compact editorial metadata, cobalt rules, and marigold edition labels so it remains part of one Deespark catalogue.

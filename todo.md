@@ -21,3 +21,7 @@
 - [x] Add a homepage contact form with a clear WhatsApp follow-up route.
 - [x] Improve image loading, script delivery, and mobile interaction performance.
 - [x] Verify the contact form and responsive layout on desktop and mobile.
+- [x] Change the hero WhatsApp CTA label to Order Now.
+- [x] Add an enquiry-category selector to the contact form.
+- [x] Add loading and success feedback to the WhatsApp form submission flow.
+- [ ] Verify the refined contact form across desktop and mobile.
