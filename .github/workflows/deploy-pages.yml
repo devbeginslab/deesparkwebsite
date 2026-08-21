@@ -44,8 +44,6 @@ jobs:
             test -f "client/public/assets/$file" || { echo "Missing required asset: client/public/assets/$file"; exit 1; }
           done
       - name: Build static site
-        env:
-          VITE_GITHUB_PAGES_BASE: /${{ github.event.repository.name }}/
         run: pnpm build:github
       - name: Configure Pages
         uses: actions/configure-pages@v5
